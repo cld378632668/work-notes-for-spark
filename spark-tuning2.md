@@ -10,7 +10,7 @@
 
 - `Java serialization`:默认情况，`Spark`使用`Java`自带的`ObjectOutputStream`框架来序列化对象，这样任何实现了 `java.io.Serializable` 接口的对象，都能被序列化。同时，你还可以通过扩展`java.io.Externalizable` 来控制序列化性能。`Java`序列化很灵活但性能较差，同时序列化后占用的字节数也较多。
 
-- `Kryo serialization`: `Spark`还可以使用`Kryo`库（版本2）提供更高效的序列化格式。`Kryo`的序列化速度和字节占用都比`Java`序列化好很多（通常是10倍左右），但`Kryo`不支持所有实现了`Serializable` 接口的类型，它需要你在程序中`register` 需要序列化的类型，以得到最佳性能。
+- `Kryo serialization`: `Spark`还可以使用`Kryo`库（版本2）提供4更高效的序列化格式。`Kryo`的序列化速度和字节占用都比`Java`序列化好很多（通常是10倍左右），但`Kryo`不支持所有实现了`Serializable` 接口的类型，它需要你在程序中`register` 需要序列化的类型，以得到最佳性能。
 
 
 &emsp;&emsp;要切换使用 `Kryo`，你可以在 `SparkConf` 初始化的时候调用 `conf.set(“spark.serializer”, “org.apache.spark.serializer.KryoSerializer”)`。这个设置不仅控制各个`worker`节点之间的混洗数据序列化格式，同时还控制`RDD`存到磁盘上的序列化格式。
