@@ -36,7 +36,7 @@ reduceByKey在每个分区移动数据之前，会对每一个分区中的key所
 
 
 groupByKey是把分区中的所有的键值对都进行移动，然后再进行整体求和，这样会导致集群节点之间的开销较大，传输效率较低，也是上文所说的内存溢出错误出现的根本原因
-<div  align="center"><img src="https://github.com/cld378632668/work-notes-for-spark/blob/master/illustration/groupbyKey.png" alt="1.1" align="center" /> <br><br/> wordcount的groupByKey的计算过程</div><br><br/>
+<div  align="center"><img src="https://github.com/cld378632668/work-notes-for-spark/blob/master/illustration/groupbyKey.png" alt="1.1" align="center" width="80%" /> <br><br/> wordcount的groupByKey的计算过程</div><br><br/>
 
 # 最后
 
