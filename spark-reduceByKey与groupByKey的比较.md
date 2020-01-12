@@ -32,11 +32,11 @@ val wordCountsWithGroup = wordPairsRDD.groupByKey().map(t => (t._1, t._2.sum))  
 上面两种方法的计算结果是相同的，但是计算过程，中间结果却有很大的区别。
 
 reduceByKey在每个分区移动数据之前，会对每一个分区中的key所对应的values进行求和，然后再利用reduce对所有分区中的每个键对应的值进行再次聚合。整个过程如图：
-<div  align="center"><img src="https://github.com/cld378632668/work-notes-for-spark/blob/master/illustration/reducebyKey.png" alt="1.1" align="center" width="80%" /> <br><br/> wordcount的reduceByKey 的计算过程</div><br><br/>
+<div  align="center"><img src="https://github.com/cld378632668/work-notes-for-spark/blob/master/illustration/reducebyKey.png" alt="1.1" align="center" width="80%" /> <br><br/> 图1 wordcount的reduceByKey 的计算过程</div><br><br/>
 
 
 groupByKey是把分区中的所有的键值对都进行移动，然后再进行整体求和，这样会导致集群节点之间的开销较大，传输效率较低，也是上文所说的内存溢出错误出现的根本原因
-<div  align="center"><img src="https://github.com/cld378632668/work-notes-for-spark/blob/master/illustration/groupbyKey.png" alt="1.1" align="center" width="80%" /> <br><br/> wordcount的groupByKey的计算过程</div><br><br/>
+<div  align="center"><img src="https://github.com/cld378632668/work-notes-for-spark/blob/master/illustration/groupbyKey.png" alt="1.1" align="center" width="80%" /> <br><br/> 图2 wordcount的groupByKey的计算过程</div><br><br/>
 
 # 最后
 
