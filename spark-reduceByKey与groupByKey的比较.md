@@ -1,5 +1,5 @@
 # 写在前面
-Spark 是目前最主流的大数据计算框架，其常用算子是最重要的考察点之一，而常用算子中groupByKey和 reduceByKey 两个算子的辨析又是必须考察的。本文就来天一谈这两个算子
+Spark 是目前最主流的大数据计算框架，其常用算子是最重要的面试考察点之一，而常用算子中groupByKey和 reduceByKey 两个算子的辨析又是必须考察的。本文就来谈一谈这两个算子。
 
 # reduceByKey与groupByKey进行对比
 
@@ -12,13 +12,13 @@ Spark 是目前最主流的大数据计算框架，其常用算子是最重要�
 
 此外groupByKey产生的中间结果的分组顺序也是不确定的，也可能是（(a,3)(a,2)(a,1)）,((b,2)(b,1)),(c,1)。
 ## 作用不同
-作用不同，reduceByKey作用是聚合，异或等，groupByKey作用主要是分组，也可以做聚合（分组之后）
-map端中间结果对键对应的值得聚合方式不同
+作用不同，reduceByKey作用是聚合，异或等，groupByKey作用主要是分组，也可以在分组之后做聚合。
 
-举例说区别
-下面我们用单词计数的例子来说明reduceByKey与groupByKey两种方式的区别。
 
-单词计数的代码如下。
+# 举例说区别
+
+下面我们用单词计数的例子来说明reduceByKey与groupByKey两种方式的区别。首先单词计数的代码如下。
+
 ```
 val words = Array("a", "a", "a", "b", "b", "b")  
 
@@ -29,15 +29,18 @@ val wordCountsWithReduce = wordPairsRDD.reduceByKey(_ + _)  //reduceByKey
 val wordCountsWithGroup = wordPairsRDD.groupByKey().map(t => (t._1, t._2.sum))  //groupByKey
 ```
 
-上面两种方法的计算结果是相同的，但是计算过程，中间结果却有很大的区别：
+上面两种方法的计算结果是相同的，但是计算过程，中间结果却有很大的区别。
+
 reduceByKey在每个分区移动数据之前，会对每一个分区中的key所对应的values进行求和，然后再利用reduce对所有分区中的每个键对应的值进行再次聚合。整个过程如图：
-<div  align="center"><img src="https://github.com/cld378632668/work-notes-for-spark/blob/master/illustration/reducebyKey.png" alt="1.1" align="center" width="80%" /> <br><br/> This is a picture in the center.</div><br><br/>
-wordcount的 reduceByKey 的计算过程
+<div  align="center"><img src="https://github.com/cld378632668/work-notes-for-spark/blob/master/illustration/reducebyKey.png" alt="1.1" align="center" width="80%" /> <br><br/> wordcount的reduceByKey 的计算过程</div><br><br/>
+
 
 groupByKey是把分区中的所有的键值对都进行移动，然后再进行整体求和，这样会导致集群节点之间的开销较大，传输效率较低，也是上文所说的内存溢出错误出现的根本原因
-<div  align="center"><img src="https://github.com/cld378632668/work-notes-for-spark/blob/master/illustration/groupbyKey.png" alt="1.1" align="center" /> <br><br/> This is a picture in the center.</div><br><br/>
+<div  align="center"><img src="https://github.com/cld378632668/work-notes-for-spark/blob/master/illustration/groupbyKey.png" alt="1.1" align="center" /> <br><br/> wordcount的groupByKey的计算过程</div><br><br/>
 
-wordcount的 groupByKey 的计算过程
+# 最后
+
+通过本文，读者能够对 reduceByKey 和 groupByKey 的区别有一个直观而深刻的认识。
 
 
 
