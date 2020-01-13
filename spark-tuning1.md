@@ -65,6 +65,12 @@ SparkContext是spark程序所有功能的唯一入口，无论是采用Scala,jav
 第三步，将主要的代码浏览一遍，对发现的如下问题进行整改
 - 发现序列化使用了 Spark 默认的`ObjectOutputStream`框架，果断决定将其换成`Kyro`，然后测试效果，此单项优化将超过一半的用例的运行时间缩短了 30%以上。
 - 垃圾回收的开销和对象个数成正比，减少对象的个数（比如用`Int`数组取代`LinkedList`）能大大减少垃圾回收的开销。具体而言，设计数据结构的时候，优先使用对象数组和原生类型，减少对复杂集合类型（如：HashMap）的使用。fastutil库提供了一些很方便的原声类型集合，同时兼容Java标准库。
+- 算子的选择。：使用更高性能的算子。
+    - groupByKey 是否可以替换为reduceByKey
+    - mapPartitions算子相比普通 map 算子更高效
+    - foreachPartitions类算子比 foreach 更高效
+    - filter 之后 coalescec减少 RDD 的partition 数量
+    - 使用repartitionAndSortWithinPartitions替代repartition与sort联合的操作
 
 第四部，check JVM的配置。
 - set the JVM flag -XX:+UseCompressedOops into the configs，for example spark-env.sh of Spark.

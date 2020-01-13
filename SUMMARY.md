@@ -5,3 +5,5 @@
 * [Cigna优化Spark Streaming实时处理应用](cigna-tune-spark-streaming.md)
 * [Spark性能优化指南——基础篇](meituan/spark-tuning-basic.md)
 * [Spark性能优化指南——高级篇](meituan/spark-tuning-pro.md)
+https://www.cnblogs.com/shishanyuan/p/8481854.html
+https://zerogravitylabs.ca/spark-performance-tuning-checklist/
